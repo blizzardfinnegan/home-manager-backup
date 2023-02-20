@@ -18,4 +18,19 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  #Packages to install
+  home.packages = [
+    pkgs.tmux
+    pkgs.neovim
+    pkgs.git
+  ];
+
+  home.file.".config/nvim".source = ./nvim;
+
+  programs.git = {
+    enable = true;
+    userName = "Blizzard Finnegan";
+    userEmail = "blizzardfinnegan@gmail.com";
+  };
 }
