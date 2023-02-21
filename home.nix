@@ -20,10 +20,11 @@
   programs.home-manager.enable = true;
 
   #Packages to install
-  home.packages = [
-    pkgs.tmux
-    pkgs.neovim
-    pkgs.git
+  home.packages = with pkgs; [
+    tmux
+    neovim
+    git
+    maven
   ];
 
   home.file.".config/nvim".source = ./nvim;
