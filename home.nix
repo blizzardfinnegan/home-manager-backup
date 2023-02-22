@@ -3,8 +3,8 @@
 {
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
-  home.username = "pinestar";
-  home.homeDirectory = "/home/pinestar";
+  home.username = "firestar";
+  home.homeDirectory = "/home/firestar";
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -16,6 +16,7 @@
   # changes in each release.
   home.stateVersion = "22.11";
 
+  nixpkgs.config.allowUnfree = true;
 
   #Add new fonts
   fonts.fontconfig.enable = true;
@@ -25,18 +26,15 @@
     packages = with pkgs; [
       exa
       zsh
-      tmux
-      neovim
       tdesktop
       discord
       st
-      git
       maven
       nerdfonts
       bitwarden
       yubioath-desktop
-      links
-      gnugpg
+      links2
+      gnupg
       openssh
       jdk11
       rsync
@@ -45,6 +43,7 @@
       vifm
       librewolf
       vlc
+      libsForQt5.bismuth
     ];
     sessionPath = ["$HOME/.local/bin" ];
   };
@@ -66,11 +65,11 @@
 
     exa.enable = true;
 
-    firefox.enable = true;
+    firefox = {
+      enable = true;
+    };
 
     gpg.enable = true;
-
-    java.enable = true;
 
     librewolf.enable = true;
 
@@ -79,23 +78,24 @@
     ssh = {
       enable = true;
       hashKnownHosts = true;
-      matchBlock = {
+      #Uncomment IdentityFiles after generation and sharing
+      matchBlocks = {
         "tailServer" = {
           hostname = "100.89.47.123";
           user = "bluestar";
-          port = "50";
-          #identityFile = 
+          port = 50;
+          #identityFile = ;
         };
         "homeServer" = {
           hostname = "192.168.0.228";
           user = "bluestar";
-          port = "50";
-          #identityFile = 
+          port = 50;
+          #identityFile = ;
         };
         "github" = {
           hostname = "github.com";
           user = "git";
-          #identityFile = 
+          #identityFile = "";
         };
       };
     };
@@ -104,10 +104,11 @@
 
     kitty = {
       enable = true;
-      #environment = {
-      # "EDITOR" = "nvim";
-      #};
-      font.size = 12;
+      environment = {
+       "EDITOR" = "nvim";
+      };
+      font.size = 10;
+      font.name = "Meslo LG S Regular Nerd Font Mono Windows Compatible";
     };
 
     git = {
@@ -115,7 +116,9 @@
       userName = "Blizzard Finnegan";
       userEmail = "blizzardfinnegan@gmail.com";
       diff-so-fancy.enable = true;
-      signing.signByDefault = false;
+      signing.signByDefault = true;
+      #Fill in with GPG key on generation
+      #signing.key = "";
     };
 
     tmux = {
@@ -125,9 +128,14 @@
       keyMode = "vi";
       mouse = true;
       newSession = true;
-      shortct = "a";
+      shortcut = "a";
       terminal = "screen-256color";
-      #shell = "\${pkgs.zsh}/bin/zsh"
+      shell = "${pkgs.zsh}/bin/zsh";
+      customPaneNavigationAndResize = true;
+      extraConfig = ''
+        bind - split-window -v
+        bind _ split-window -h
+        '';
       plugins = with pkgs.tmuxPlugins; [
         cpu
         resurrect
@@ -136,6 +144,12 @@
           extraConfig = ''
             set -g @continuum-restore 'on'
             set -g @continuum-save-interval '60'
+            '';
+        }
+        {
+          plugin = power-theme;
+          extraConfig = ''
+            set -g @tmux_power_theme 'forest'
             '';
         }
       ];
@@ -153,35 +167,48 @@
         vim-nix
         gitsigns-nvim
         nvim-lspconfig
-        nvim-treesitter
+        nvim-treesitter.withAllGrammars
         nvim-treesitter-textobjects
         lualine-nvim
         nvim-cmp
-        { 
-          plugin = nvim-jdtls;
-          config = ''
-            local project_name = vim.fn.fnamemodify(vim.fn.cwd(), ':p:h:t')
-          local home = '${config.home.homeDirectory}
-          local workspace_dir = home .. '/.local/jdtls/workspaces/' .. project_name
-          local plugin_location = home .. '/.local/jdtls/plugins/org.eclipse.equinox.launcher_1.6.400.v2021924-0641.jar'
-          local config_location = home .. '/.local/jdtls/config_linux'
-          local binary_location = home .. '/.local/jdtls/bin/jdtls'
-          local config = {
-            cmd = {'java', '-jar', plugin_location, '-configuration', config_location, '-data', workspace_dir, binary_location},
-            root_dir = vim.fs.dirname(vim.fs.find({'.gradelw','.git','mvnw'}, {upward = true })[1]),
-          }
-          require('jdtls').start_or_attach(config)
-          '';
-        }
+        #nvim-jdtls
+        #{ 
+        #  plugin = nvim-jdtls;
+        #  config = ''
+        #    local project_name = vim.fn.fnamemodify(vim.fn.cwd(), ':p:h:t')
+        #  local home = '${config.home.homeDirectory}
+        #  local workspace_dir = home .. '/.local/jdtls/workspaces/' .. project_name
+        #  local plugin_location = home .. '/.local/jdtls/plugins/org.eclipse.equinox.launcher_1.6.400.v2021924-0641.jar'
+        #  local config_location = home .. '/.local/jdtls/config_linux'
+        #  local binary_location = home .. '/.local/jdtls/bin/jdtls'
+        #  local config = {
+        #    cmd = {'java', '-jar', plugin_location, '-configuration', config_location, '-data', workspace_dir, binary_location},
+        #    root_dir = vim.fs.dirname(vim.fs.find({'.gradelw','.git','mvnw'}, {upward = true })[1]),
+        #  }
+        #  require('jdtls').start_or_attach(config)
+        #  '';
+        #}
         nvim-tree-lua
         telescope-nvim
       ];
+      extraLuaConfig = ''
+        vim.cmd [[colorscheme desert]]
+        require("nvim-tree").setup()
+        require("lualine").setup()
+        require('nvim-treesitter.configs').setup {
+          highlight = { enable = true },
+          indent = { enable = true },
+        }
+        '';
     };
 
     zsh = {
       enable = true;
       enableAutosuggestions = true;
       enableCompletion = true;
+      initExtra = ''
+        [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+        '';
       #add the following to system configuration:
       #environment.pathsToLink = [ "/share/zsh" ];
       enableSyntaxHighlighting = true;
@@ -191,7 +218,7 @@
       };
       history = {
         size = 100000;
-        save = ${config.programs.zsh.history.size};
+        save = config.programs.zsh.history.size;
         share = true;
         extended = true;
         expireDuplicatesFirst = true;
