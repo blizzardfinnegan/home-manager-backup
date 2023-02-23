@@ -6,8 +6,9 @@ stdenvNoCC.mkDerivation {
     sha256 = "sha256-uK8ZJcs7gX/RBh4ApF/7xqynaBnYsvWTliYAnr9DL8c=";
   };
   dontUnpack = true;
-  installPhase = ''
-  mkdir -p ${builtins.toString ./.}home/${config.home.username}/.local/jdtls
-  tar -xf $src -C ${builtins.toString ./.}home/${config.home.username}/.local/jdtls
+  installPhase = 
+  ''
+  mkdir -p ${builtins.toString config.home.homeDirectory}/.local/jdtls
+  tar -xf $src -C ${builtins.toString config.home.homeDirectory}/.local/jdtls
   '';
 }
