@@ -1,4 +1,4 @@
-{stdenvNoCC, fetchurl, config, ...}:
+{stdenvNoCC, fetchurl, ...}:
 stdenvNoCC.mkDerivation {
   name = "local-jdtls";
   src = fetchurl {
@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation {
   dontUnpack = true;
   installPhase = 
   ''
-  mkdir -p ${builtins.toString config.home.homeDirectory}/.local/jdtls
-  tar -xf $src -C ${builtins.toString config.home.homeDirectory}/.local/jdtls
+  mkdir -p $out
+  tar -xf $src -C $out
   '';
 }

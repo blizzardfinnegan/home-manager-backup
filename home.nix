@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   #Uncomment this if you aren't on NixOS
   #targets.genericLinux.enable = true;
 
@@ -20,9 +23,8 @@
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.packageOverrides = pkgs: {
-    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") { inherit pkgs; };
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {inherit pkgs;};
   };
-
 
   #Add new fonts
   fonts.fontconfig.enable = true;
@@ -30,7 +32,6 @@
   #Packages to install
   home = {
     packages = with pkgs; [
-      ( callPackage ./local-jdtls.nix { inherit config; } )
       tdesktop
       discord
       maven
@@ -49,9 +50,8 @@
       nomachine-client
       neofetch
     ];
-    sessionPath = ["$HOME/.local/bin" ];
+    sessionPath = ["$HOME/.local/bin"];
   };
-  xdg.configFile."nvim/ftplugin/java.lua".source = ./java.lua;
 
   manual = {
     json.enable = true;
@@ -60,9 +60,7 @@
 
   news.display = "show";
 
-
   programs = {
-
     home-manager.enable = true;
 
     btop.enable = true;
@@ -79,7 +77,7 @@
           default = "DuckDuckGo";
         };
         id = 0;
-        bookmarks = [ ];
+        bookmarks = [];
         settings = {
           "browser.download.panel.shown" = true;
           "browser.search.region" = "IE";
@@ -118,16 +116,16 @@
           "trailhead.firstrun.didSeeAboutWelcome" = true;
         };
         extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-         bitwarden
-         multi-account-containers
-         darkreader
-         protondb-for-steam
-         return-youtube-dislikes
-         single-file
-         sponsorblock
-         steam-database
-         ublock-origin
-         wayback-machine
+          bitwarden
+          multi-account-containers
+          darkreader
+          protondb-for-steam
+          return-youtube-dislikes
+          single-file
+          sponsorblock
+          steam-database
+          ublock-origin
+          wayback-machine
         ];
       };
     };
@@ -207,7 +205,7 @@
     kitty = {
       enable = true;
       environment = {
-       "EDITOR" = "nvim";
+        "EDITOR" = "nvim";
       };
       font.size = 10;
       font.name = "Meslo LG S Regular Nerd Font Mono Windows Compatible";
@@ -241,7 +239,7 @@
       extraConfig = ''
         bind - split-window -v
         bind _ split-window -h
-        '';
+      '';
       plugins = with pkgs.tmuxPlugins; [
         cpu
         resurrect
@@ -250,13 +248,13 @@
           extraConfig = ''
             set -g @continuum-restore 'on'
             set -g @continuum-save-interval '60'
-            '';
+          '';
         }
         {
           plugin = power-theme;
           extraConfig = ''
             set -g @tmux_power_theme 'forest'
-            '';
+          '';
         }
       ];
     };
@@ -267,7 +265,7 @@
       withNodeJs = true;
       withPython3 = true;
       withRuby = true;
-      extraPackages = with pkgs; [ cargo ];
+      extraPackages = with pkgs; [cargo];
       plugins = with pkgs.vimPlugins; [
         packer-nvim
         vim-nix
@@ -277,8 +275,12 @@
         nvim-treesitter-textobjects
         lualine-nvim
         nvim-cmp
+        # install java.lua as a plugin
+        (pkgs.callPackage ./nvim-config.nix {
+            unpackedJdtls = callPackage ./local-jdtls.nix {};
+        })
         #nvim-jdtls
-        #{ 
+        #{
         #  plugin = nvim-jdtls;
         #  config = ''
         #    local project_name = vim.fn.fnamemodify(vim.fn.cwd(), ':p:h:t')
@@ -305,7 +307,9 @@
           highlight = { enable = true },
           indent = { enable = true },
         }
-        '';
+        -- evaluate java.lua
+        require("java")
+      '';
     };
 
     zsh = {
@@ -314,7 +318,7 @@
       enableCompletion = true;
       initExtra = ''
         [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-        '';
+      '';
       #add the following to system configuration:
       #environment.pathsToLink = [ "/share/zsh" ];
       enableSyntaxHighlighting = true;
