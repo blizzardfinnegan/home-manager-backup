@@ -1,5 +1,8 @@
 { config, pkgs, ... }:
 {
+  #Uncomment this if you aren't on NixOS
+  #targets.genericLinux.enable = true;
+
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "firestar";
@@ -27,6 +30,7 @@
   #Packages to install
   home = {
     packages = with pkgs; [
+      ( callPackage ./local-jdtls.nix { inherit config; } )
       tdesktop
       discord
       maven
@@ -47,6 +51,7 @@
     ];
     sessionPath = ["$HOME/.local/bin" ];
   };
+  xdg.configFile."nvim/ftplugin/java.lua".source = ./java.lua;
 
   manual = {
     json.enable = true;
@@ -54,6 +59,7 @@
   };
 
   news.display = "show";
+
 
   programs = {
 
@@ -182,7 +188,7 @@
           port = 50;
           identityFile = "${config.home.homeDirectory}/.ssh/snowglobe";
         };
-        "homeServer" = {
+        "localServer" = {
           hostname = "192.168.0.228";
           user = "bluestar";
           port = 50;
