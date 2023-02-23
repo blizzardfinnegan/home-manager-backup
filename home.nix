@@ -104,18 +104,18 @@
           hostname = "100.89.47.123";
           user = "bluestar";
           port = 50;
-          identityFile = "${config.home.homeDirectory}/snowglobe";
+          identityFile = "${config.home.homeDirectory}/.ssh/snowglobe";
         };
         "homeServer" = {
           hostname = "192.168.0.228";
           user = "bluestar";
           port = 50;
-          identityFile = "${config.home.homeDirectory}/snowglobe";
+          identityFile = "${config.home.homeDirectory}/.ssh/snowglobe";
         };
         "github" = {
           hostname = "github.com";
           user = "git";
-          identityFile = "${config.home.homeDirectory}/github";
+          identityFile = "${config.home.homeDirectory}/.ssh/github";
         };
       };
     };
