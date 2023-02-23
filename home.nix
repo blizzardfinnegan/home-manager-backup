@@ -40,7 +40,6 @@
       rsync
       btop
       vifm
-      librewolf
       vlc
       libsForQt5.bismuth
       nomachine-client
@@ -74,6 +73,43 @@
         };
         id = 0;
         bookmarks = [ ];
+        settings = {
+          "browser.download.panel.shown" = true;
+          "browser.search.region" = "IE";
+          "browser.newtabpage.enabled" = false;
+          "browser.startup.homepage" = "about:blank";
+          "browser.toolbars.bookmarks.visibility" = "always";
+          "browser.urlbar.quicksuggest.scenario" = "offline";
+          "browser.urlbar.suggest.bookmark" = false;
+          "browser.urlbar.suggest.engines" = false;
+          "browser.urlbar.suggest.history" = false;
+          "browser.urlbar.suggest.openpage" = false;
+          "browser.urlbar.suggest.topsites" = false;
+          "extensions.formautofill.creditCards.enabled" = false;
+          "extensions.pictureinpicture.enable_picture_in_picture_overrides" = true;
+          "extensions.ui.extension.hidden" = false;
+          "extensions.translations.disabled" = false;
+          "extensions.webcompat.enable_shims" = true;
+          "extensions.webcompat.perform_injections" = true;
+          "identity.fxaccounts.account.device.name" = "SnowyForest's Firefox on Nix";
+          "media.eme.enabled" = true;
+          "media.autoplay.default" = 5;
+          "network.dns.disablePrefetch" = true;
+          "network.predictor.enabled" = true;
+          "network.prefetch-next" = false;
+          "pdfjs.enabledCache.state" = true;
+          "pref.privacy.disable_button.cookie_exceptions" = false;
+          "privacy.donottrackheader.enabled" = true;
+          "privacy.purge_trackers.date_in_cookie_database" = 0;
+          "privacy.trackingprotection.enabled" = true;
+          "privacy.userContext.ui.enabled" = true;
+          "privacy.userContext.newTabContainerOnLeftClick.enabled" = true;
+          "signon.autofillForms" = false;
+          "signon.generation.enabled" = false;
+          "signon.management.page.breach-alerts.enabled" = false;
+          "signon.rememberSignons" = false;
+          "trailhead.firstrun.didSeeAboutWelcome" = true;
+        };
         extensions = with pkgs.nur.repos.rycee.firefox-addons; [
          bitwarden
          multi-account-containers
@@ -91,7 +127,46 @@
 
     gpg.enable = true;
 
-    librewolf.enable = true;
+    librewolf = {
+      enable = true;
+      settings = {
+        "browser.download.panel.shown" = true;
+        "browser.search.region" = "IE";
+        "browser.newtabpage.enabled" = false;
+        "browser.startup.homepage" = "about:blank";
+        "browser.toolbars.bookmarks.visibility" = "always";
+        "browser.urlbar.quicksuggest.scenario" = "offline";
+        "browser.urlbar.suggest.bookmark" = false;
+        "browser.urlbar.suggest.engines" = false;
+        "browser.urlbar.suggest.history" = false;
+        "browser.urlbar.suggest.openpage" = false;
+        "browser.urlbar.suggest.topsites" = false;
+        "extensions.formautofill.creditCards.enabled" = false;
+        "extensions.pictureinpicture.enable_picture_in_picture_overrides" = true;
+        "extensions.ui.extension.hidden" = false;
+        "extensions.translations.disabled" = false;
+        "extensions.webcompat.enable_shims" = true;
+        "extensions.webcompat.perform_injections" = true;
+        "identity.fxaccounts.account.device.name" = "SnowyForest's Firefox on Nix";
+        "media.eme.enabled" = true;
+        "media.autoplay.default" = 5;
+        "network.dns.disablePrefetch" = true;
+        "network.predictor.enabled" = true;
+        "network.prefetch-next" = false;
+        "pdfjs.enabledCache.state" = true;
+        "pref.privacy.disable_button.cookie_exceptions" = false;
+        "privacy.donottrackheader.enabled" = true;
+        "privacy.purge_trackers.date_in_cookie_database" = 0;
+        "privacy.trackingprotection.enabled" = true;
+        "privacy.userContext.ui.enabled" = true;
+        "privacy.userContext.newTabContainerOnLeftClick.enabled" = true;
+        "signon.autofillForms" = false;
+        "signon.generation.enabled" = false;
+        "signon.management.page.breach-alerts.enabled" = false;
+        "signon.rememberSignons" = false;
+        "trailhead.firstrun.didSeeAboutWelcome" = true;
+      };
+    };
 
     man.enable = true;
 
