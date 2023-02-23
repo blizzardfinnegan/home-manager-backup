@@ -43,6 +43,7 @@
       vlc
       libsForQt5.bismuth
       nomachine-client
+      neofetch
     ];
     sessionPath = ["$HOME/.local/bin" ];
   };
