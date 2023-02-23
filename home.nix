@@ -1,5 +1,4 @@
 { config, pkgs, ... }:
-
 {
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -17,6 +16,10 @@
   home.stateVersion = "22.11";
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.packageOverrides = pkgs: {
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") { inherit pkgs; };
+  };
+
 
   #Add new fonts
   fonts.fontconfig.enable = true;
@@ -24,11 +27,8 @@
   #Packages to install
   home = {
     packages = with pkgs; [
-      exa
-      zsh
       tdesktop
       discord
-      st
       maven
       nerdfonts
       bitwarden
@@ -39,11 +39,11 @@
       jdk11
       rsync
       btop
-      kitty
       vifm
       librewolf
       vlc
       libsForQt5.bismuth
+      nomachine-client
     ];
     sessionPath = ["$HOME/.local/bin" ];
   };
@@ -67,6 +67,26 @@
 
     firefox = {
       enable = true;
+      profiles.default = {
+        name = "default";
+        search = {
+          default = "DuckDuckGo";
+        };
+        id = 0;
+        bookmarks = [ ];
+        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+         bitwarden
+         multi-account-containers
+         darkreader
+         protondb-for-steam
+         return-youtube-dislikes
+         single-file
+         sponsorblock
+         steam-database
+         ublock-origin
+         wayback-machine
+        ];
+      };
     };
 
     gpg.enable = true;
@@ -84,18 +104,18 @@
           hostname = "100.89.47.123";
           user = "bluestar";
           port = 50;
-          #identityFile = ;
+          identityFile = "${config.home.homeDirectory}/snowglobe";
         };
         "homeServer" = {
           hostname = "192.168.0.228";
           user = "bluestar";
           port = 50;
-          #identityFile = ;
+          identityFile = "${config.home.homeDirectory}/snowglobe";
         };
         "github" = {
           hostname = "github.com";
           user = "git";
-          #identityFile = "";
+          identityFile = "${config.home.homeDirectory}/github";
         };
       };
     };
@@ -109,6 +129,10 @@
       };
       font.size = 10;
       font.name = "Meslo LG S Regular Nerd Font Mono Windows Compatible";
+      settings = {
+        editor = "nvim";
+        shell = "tmux attach";
+      };
     };
 
     git = {
@@ -118,7 +142,7 @@
       diff-so-fancy.enable = true;
       signing.signByDefault = true;
       #Fill in with GPG key on generation
-      #signing.key = "";
+      signing.key = "1ADBD1BF";
     };
 
     tmux = {
